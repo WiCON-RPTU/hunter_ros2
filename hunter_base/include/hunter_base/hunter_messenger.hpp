@@ -112,7 +112,7 @@ class HunterMessenger {
     hunter_msgs::msg::HunterStatus status_msg;
 
     status_msg.header.stamp = current_time_;
-    state.motion_state.linear_velocity = state.motion_state.linear_velocity *0.9103;
+    state.motion_state.linear_velocity = state.motion_state.linear_velocity;
     status_msg.linear_velocity = state.motion_state.linear_velocity;
     double phi =ConvertInnerAngleToCentral(state.motion_state.steering_angle);
     status_msg.steering_angle = phi;
@@ -294,8 +294,8 @@ class HunterMessenger {
     // publish odometry and tf messages
     nav_msgs::msg::Odometry odom_msg;
     odom_msg.header.stamp = current_time_;
-    odom_msg.header.frame_id = base_frame_;
-    odom_msg.child_frame_id = "";
+    odom_msg.header.frame_id = odom_frame_;
+    odom_msg.child_frame_id = base_frame_;
 
     odom_msg.pose.pose.position.x = position_x_;
     odom_msg.pose.pose.position.y = position_y_;
@@ -307,15 +307,15 @@ class HunterMessenger {
     odom_msg.twist.twist.angular.z = linear_speed_ / l * std::tan(steering_angle_);
 
     odom_msg.pose.covariance = {
-    0.001,      0.0,        0.0,        0.0,        0.0,        0.0,
-    0.0,        0.001,      0.0,        0.0,        0.0,        0.0,
+    10.0,      0.0,        0.0,        0.0,        0.0,        0.0,
+    0.0,        10.0,      0.0,        0.0,        0.0,        0.0,
     0.0,        0.0,        1000000.0,  0.0,        0.0,        0.0,
     0.0,        0.0,        0.0,        1000000.0,  0.0,        0.0,
     0.0,        0.0,        0.0,        0.0,        1000000.0,  0.0,
     0.0,        0.0,        0.0,        0.0,        0.0,        1000.0};
     odom_msg.twist.covariance = {
-    0.001,      0.0,        0.0,        0.0,        0.0,        0.0,
-    0.0,        0.001,      0.0,        0.0,        0.0,        0.0,
+    10.0,      0.0,        0.0,        0.0,        0.0,        0.0,
+    0.0,        10.0,      0.0,        0.0,        0.0,        0.0,
     0.0,        0.0,        1000000.0,  0.0,        0.0,        0.0,
     0.0,        0.0,        0.0,        1000000.0,  0.0,        0.0,
     0.0,        0.0,        0.0,        0.0,        1000000.0,  0.0,
